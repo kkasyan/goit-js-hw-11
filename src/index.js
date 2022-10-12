@@ -24,3 +24,5 @@ window.scrollBy({
   top: cardHeight * 2,
   behavior: 'smooth',
 });
+
+// /ку
