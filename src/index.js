@@ -3,9 +3,14 @@ import { onClearHTMLMarkup } from './js/clearMarkup';
 import { simple } from './js/gallery';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { makeCardTemplate, simple } from './js/makeCardTemplate';
+import {
+  makeCardTemplate,
+  simple,
+  onGalleryClick,
+} from './js/makeCardTemplate';
 import { refs } from './js/refs';
 import { getPhotos } from './js/pixabay';
+import Notiflix from 'notiflix';
 import {
   onEmptyInput,
   onFoundImages,
@@ -13,31 +18,39 @@ import {
   onSearchEnd,
 } from './js/notifications';
 
-let pages;
+let page = 1;
+let query = '';
+const perPage = 30;
 
 refs.formEl.addEventListener('submit', onSubmit);
+refs.galleryEl.addEventListener('click', onGalleryClick);
 
 function onSubmit(evt) {
   evt.preventDefault();
+  onClearHTMLMarkup();
   const searchQuery = evt.currentTarget.elements.searchQuery.value
     .trim()
     .toLowerCase();
 
   if (!searchQuery) {
+    // Notiflix.Loading.circle();
     onEmptyInput();
+
     return;
   }
-
-  getPhotos()
+  getPhotos(searchQuery)
     .then(({ data }) => {
       if (data.hits.length === 0) {
         onNoResults();
         return;
       }
-      onFoundImages(data.totalHits);
+
       makeCardTemplate(data.hits);
-      if (pages === 1) {
+      if (page === 1) {
+        onFoundImages(data.totalHits);
         onSearchEnd();
+      } else {
+        onFoundImages(data.totalHits);
       }
     })
     .catch(error => console.log(error));

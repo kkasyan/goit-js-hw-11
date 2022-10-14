@@ -42,8 +42,6 @@ export function makeCardTemplate(hits) {
   refs.galleryEl.insertAdjacentHTML('beforeend', gallery);
 }
 
-refs.galleryEl.addEventListener('click', onGalleryClick);
-
-function onGalleryClick(evt) {
+export function onGalleryClick(evt) {
   evt.preventDefault();
 }

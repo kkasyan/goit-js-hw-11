@@ -16,22 +16,29 @@
     <script type="module" src="./index.js"></script>
   </head>
   <body>
-    <form class="search-form" id="search-form">
-      <input
-        type="text"
-        name="searchQuery"
-        autocomplete="off"
-        placeholder="Search images..."
-      />
-      <button type="submit">
-        <svg width="30" height="30">
-          <use href="./img/symbol-defs.svg#icon-search"></use>
-        </svg>
-      </button>
-    </form>
-    <div class="gallery">
-      <!-- Картки зображень -->
+    <div class="container">
+      <form class="search-form" id="search-form">
+        <input
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button type="submit">
+          <svg width="30" height="30">
+            <use href="./icon/symbol-defs.svg#icon-search"></use>
+          </svg>
+        </button>
+      </form>
+      <div class="gallery">
+        <!-- Картки зображень -->
+      </div>
+      <button type="button" class="load-more is is-hidden">Load more</button>
+      <a class="btn-to-top" title="Return to top">
+        <span class="material-icons is-hidden"
+          ><svg width="30" height="30">
+            <use href="./icon/symbol-defs.svg#icon-arrow-up"></use></svg></span
+      ></a>
     </div>
-    <button type="button" class="load-more is is-hidden">Load more</button>
   </body>
 </html>
