@@ -1,19 +1,49 @@
-export function makeCardTemplate() {
-  return `<div class="photo-card">
-  <a href=''><img src="" alt="" loading="lazy" />
+import { refs } from './refs';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+export const simple = new SimpleLightbox('.gallery a', {
+  captionDelay: 250,
+  captionsData: 'alt',
+});
+
+export function makeCardTemplate(hits) {
+  const gallery = hits
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `<div class="photo-card">
+  <a href='${largeImageURL}'><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
   <div class="info">
     <p class="info-item">
-      <b>Likes</b>
+      <b>Likes: </b>${likes}
     </p>
     <p class="info-item">
-      <b>Views</b>
+      <b>Views: </b>${views}
     </p>
     <p class="info-item">
-      <b>Comments</b>
+      <b>Comments: </b>${comments}
     </p>
     <p class="info-item">
-      <b>Downloads</b>
+      <b>Downloads: </b>${downloads}
     </p>
-  </div></a>
+  </div>
 </div>`;
+      }
+    )
+    .join('');
+  refs.galleryEl.insertAdjacentHTML('beforeend', gallery);
+}
+
+refs.galleryEl.addEventListener('click', onGalleryClick);
+
+function onGalleryClick(evt) {
+  evt.preventDefault();
 }
