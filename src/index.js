@@ -9,7 +9,7 @@ import {
   onGalleryClick,
 } from './js/makeCardTemplate';
 import { refs } from './js/refs';
-import { getPhotos } from './js/pixabay';
+import { getPhotos, incrementPage } from './js/pixabay-api';
 import Notiflix from 'notiflix';
 import {
   onEmptyInput,
@@ -17,50 +17,92 @@ import {
   onNoResults,
   onSearchEnd,
 } from './js/notifications';
+import PixabayApiService from './js/pixabay-api';
+import { data } from 'infinite-scroll';
 
-let page = 1;
-let query = '';
-const perPage = 30;
+// export let page = 1;
+// export const perPage = 30;
+// export let searchQuery = '';
+
+const pixabay = new PixabayApiService();
 
 refs.formEl.addEventListener('submit', onSubmit);
 refs.galleryEl.addEventListener('click', onGalleryClick);
+refs.btnMoreEl.addEventListener('click', onLoadMore);
 
 function onSubmit(evt) {
   evt.preventDefault();
   onClearHTMLMarkup();
-  const searchQuery = evt.currentTarget.elements.searchQuery.value
+  pixabay.resetPage();
+  // searchQuery = evt.currentTarget.elements.searchQuery.value
+  //   .trim()
+  //   .toLowerCase();
+  pixabay.searchQuery = evt.currentTarget.elements.searchQuery.value
     .trim()
     .toLowerCase();
+  pixabay.getPhotos();
+  // if (!this.searchQuery) {
+  //   // Notiflix.Loading.circle();
+  //   onEmptyInput();
+  //   return;
+  // }
+  // if (!searchQuery) {
+  //   // Notiflix.Loading.circle();
+  //   onEmptyInput();
 
-  if (!searchQuery) {
-    // Notiflix.Loading.circle();
-    onEmptyInput();
+  //   return;
+  // }
+  //   pixabay
+  //     .getPhotos(this.searchQuery, this.page, this.perPage)
+  //     .then(({ data }) => {
+  //       this.totalPages = Number(Math.ceil(data.total / this.perPage));
+  //       console.log(Number('this.totalPages'));
+  //       if (data.hits.length === 0) {
+  //         onNoResults();
+  //         return;
+  //       }
+  //       if (data.hits.length !== 0) {
+  //         makeCardTemplate(data.hits);
+  //         pixabay.incrementPage(this.page);
+  //         onFoundImages(data.totalHits);
+  //         // pixabay.calculateTotalPages(data.total);
+  //         // if (this.totalPages === 1) {
+  //         //   onSearchEnd();
+  //         // }
+  //         // if (this.page < 1) {
+  //         //   makeCardTemplate(data.hits);
+  //         //   incrementPage(page);
+  //         // else {
+  //         //   // onFoundImages(data.totalHits);
+  //         // }
+  //       }
+  //     })
+  //     // .then(page => {
+  //     //   incrementPage(page);
+  //     // })
+  //     .catch(error => console.log(error));
+  // }
 
-    return;
-  }
-  getPhotos(searchQuery)
-    .then(({ data }) => {
-      if (data.hits.length === 0) {
-        onNoResults();
-        return;
-      }
+  // const { height: cardHeight } = document
+  //   .querySelector('.gallery')
+  //   .firstElementChild.getBoundingClientRect();
 
-      makeCardTemplate(data.hits);
-      if (page === 1) {
-        onFoundImages(data.totalHits);
-        onSearchEnd();
-      } else {
-        onFoundImages(data.totalHits);
-      }
-    })
-    .catch(error => console.log(error));
+  // window.scrollBy({
+  //   top: cardHeight * 2,
+  //   behavior: 'smooth',
+  // });
 }
+function onLoadMore() {
+  // pixabay.getPhotos(this.searchQuery, this.page, this.perPage);
+  // pixabay.incrementPage(this.page);
+  pixabay.getPhotos();
+}
+// makeCardTemplate();
+// pixabay.incrementPage();
+// makeCardTemplate(hits);
 
-// const { height: cardHeight } = document
-//   .querySelector('.gallery')
-//   .firstElementChild.getBoundingClientRect();
+// pixabay.getPhotos(this.searchQuery, this.page, this.perPage);
 
-// window.scrollBy({
-//   top: cardHeight * 2,
-//   behavior: 'smooth',
-// });
+// getPhotos(searchQuery, page, perPage);
+// makeCardTemplate();
+// incrementPage(page);
