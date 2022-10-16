@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { data } from 'infinite-scroll';
 import { refs } from './refs';
-import { searchQuery, page, perPage } from '../index';
+// import { searchQuery, page, perPage } from '../index';
 import { onFoundImages, onSearchEnd } from './notifications';
 import { makeCardTemplate } from './makeCardTemplate';
 
