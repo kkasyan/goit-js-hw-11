@@ -49,7 +49,7 @@ function onSubmit(evt) {
   // if (!searchQuery) {
   //   // Notiflix.Loading.circle();
   //   onEmptyInput();
-
+  //
   //   return;
   // }
   //   pixabay
