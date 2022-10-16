@@ -51,7 +51,7 @@ function onSubmit(evt) {
   //   onEmptyInput();
   //
   //   return;
-  // }
+  // }?
   //   pixabay
   //     .getPhotos(this.searchQuery, this.page, this.perPage)
   //     .then(({ data }) => {
