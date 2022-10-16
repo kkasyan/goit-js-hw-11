@@ -1,12 +1,18 @@
 import axios from 'axios';
 import { data } from 'infinite-scroll';
-import { refs } from './refs';
-// import { searchQuery, page, perPage } from '../index';
-import { onFoundImages, onSearchEnd } from './notifications';
+import { onFoundImages, onSearchEnd, onNoResults } from './notifications';
 import { makeCardTemplate } from './makeCardTemplate';
+import { onBtnHide, onBtnShow } from './btnClass';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import { pixabay } from '../index';
 
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 const KEY = '30555185-2572b857d9a371e437f5a3fd3';
+
+const simple = new SimpleLightbox('.gallery a', {
+  captionDelay: 250,
+});
 
 export default class PixabayApiService {
   constructor(params) {
@@ -23,22 +29,35 @@ export default class PixabayApiService {
 
       if (response.data.hits.length === 0) {
         onNoResults();
+        return;
       }
       if (response.data.hits.length !== 0) {
-        onFoundImages(data.totalHits);
+        onFoundImages(response.data.totalHits);
         makeCardTemplate(response.data.hits);
         this.incrementPage();
+        onBtnShow();
+        simple.refresh();
       }
-      if (response.data.hits.length < options.per_page) {
+      if (response.data.hits.length < this.perPage) {
         onSearchEnd();
+        onBtnHide();
       }
-      //   const response = await axios.get(BASEURL, { params: options });
+
+      if (this.page > 1) {
+        const { height: cardHeight } = document
+          .querySelector('.gallery')
+          .firstElementChild.getBoundingClientRect();
+
+        window.scrollBy({
+          top: cardHeight * 2,
+          behavior: 'smooth',
+        });
+      }
     } catch (error) {
-      throw new Error(error.message);
-      // if (this.error.response.status !== 200) {
-      //   throw new Error(response.status);
-      // }
-      // return response;
+      if (response.status === 404) {
+        throw new Error(response.status);
+      }
+      return response;
     }
   }
 
@@ -62,37 +81,8 @@ export default class PixabayApiService {
   set query(newQuery) {
     this.searchQuery = newQuery;
   }
-}
 
-// const BASEURL = 'https://pixabay.com/api/';
-// const options = {
-//   key: '30555185-2572b857d9a371e437f5a3fd3',
-//   image_type: 'all',
-//   orientation: 'all',
-//   safesearch: 'false',
-//   per_page: 30,
-//   page: 1,
-// };
-
-// export async function getPhotos(searchQuery, page, perPage) {
-//   const response = await axios.get(
-//     `?key=${KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=false&page=${page}&per_page=${perPage}`
-//   );
-//   //   const response = await axios.get(BASEURL, { params: options });
-//   if (response.status !== 200) {
-//     throw new Error(response.status);
-//   }
-//   return response;
-// }
-
-// export function incrementPage(page) {
-//   page += 1;
-// }
-
-// function resetPage(page) {
-//   page = 1;
-// }
-
-export function calculateTotalPages(total) {
-  total = Math.ceil(total / perPage);
+  onLoadMore() {
+    pixabay.getPhotos();
+  }
 }

@@ -1,11 +1,5 @@
 import { refs } from './refs';
-import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
-export const simple = new SimpleLightbox('.gallery a', {
-  captionDelay: 250,
-  captionsData: 'alt',
-});
 
 export function makeCardTemplate(hits) {
   const gallery = hits
@@ -44,4 +38,7 @@ export function makeCardTemplate(hits) {
 
 export function onGalleryClick(evt) {
   evt.preventDefault();
+  if (evt.target.nodeName !== 'IMG') {
+    return;
+  }
 }
