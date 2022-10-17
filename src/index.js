@@ -1,10 +1,8 @@
-const axios = require('axios');
 import { onClearHTMLMarkup } from './js/clearMarkup';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { onGalleryClick } from './js/makeCardTemplate';
-import { refs } from './js/refs';
+import { refs } from '../src/js/refs';
 import PixabayApiService from './js/pixabay-api';
-import { data } from 'infinite-scroll';
 import { onGalleryClick } from './js/makeCardTemplate';
 
 export const pixabay = new PixabayApiService();

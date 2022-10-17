@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { data } from 'infinite-scroll';
 import { onFoundImages, onSearchEnd, onNoResults } from './notifications';
 import { makeCardTemplate } from './makeCardTemplate';
 import { onBtnHide, onBtnShow } from './btnClass';
